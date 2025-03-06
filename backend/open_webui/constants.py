@@ -45,7 +45,7 @@ class ERROR_MESSAGES(str, Enum):
     INVALID_EMAIL_FORMAT = "The email format you entered is invalid. Please double-check and make sure you're using a valid email address (e.g., yourname@example.com)."
     INVALID_PASSWORD = (
         "The password provided is incorrect. Please check for typos and try again."
-    )
+    )    
     INVALID_TRUSTED_HEADER = "Your provider has not provided a trusted header. Please contact your administrator for assistance."
 
     EXISTING_USERS = "You can't turn off authentication because there are existing users. If you want to disable WEBUI_AUTH, make sure your web interface doesn't have any existing users and is a fresh installation."
@@ -102,6 +102,7 @@ class ERROR_MESSAGES(str, Enum):
         "Duplicate content detected. Please provide unique content to proceed."
     )
     FILE_NOT_PROCESSED = "Extracted content is not available for this file. Please ensure that the file is processed before proceeding."
+    PASSWORD_FORMAT_INVALID = "The password format is invalid. It must be at least 8 characters long and include uppercase, lowercase, number, and special character, with no spaces."
 
 
 class TASKS(str, Enum):

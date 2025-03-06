@@ -290,6 +290,7 @@ JWT_EXPIRES_IN = PersistentConfig(
     "JWT_EXPIRES_IN", "auth.jwt_expiry", os.environ.get("JWT_EXPIRES_IN", "-1")
 )
 
+
 ####################################
 # OAuth config
 ####################################
@@ -1046,6 +1047,10 @@ ENABLE_MESSAGE_RATING = PersistentConfig(
     "ENABLE_MESSAGE_RATING",
     "ui.enable_message_rating",
     os.environ.get("ENABLE_MESSAGE_RATING", "True").lower() == "true",
+)
+
+ENABLE_PASSWORD_POLICY_ENDFORCE = (
+    os.environ.get("ENABLE_PASSWORD_POLICY_ENDFORCE", "False").lower() == "true",
 )
 
 

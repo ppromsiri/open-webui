@@ -144,15 +144,28 @@ async def update_profile(
 
 @router.post("/update/password", response_model=bool)
 async def update_password(
-    form_data: UpdatePasswordForm, session_user=Depends(get_current_user)
+    request: Request,form_data: UpdatePasswordForm, session_user=Depends(get_current_user)
 ):
+    ENABLE_PASSWORD_POLICY_ENDFORCE=request.app.state.config.ENABLE_PASSWORD_POLICY_ENDFORCE
     if WEBUI_AUTH_TRUSTED_EMAIL_HEADER:
         raise HTTPException(400, detail=ERROR_MESSAGES.ACTION_PROHIBITED)
     if session_user:
         user = Auths.authenticate_user(session_user.email, form_data.password)
 
         if user:
-            hashed = get_password_hash(form_data.new_password)
+            new_password = form_data.new_password
+            if ENABLE_PASSWORD_POLICY_ENDFORCE:
+                if (
+                    len(new_password) < 8
+                    or not any(char.islower() for char in new_password)
+                    or not any(char.isupper() for char in new_password)
+                    or not any(char.isdigit() for char in new_password)
+                    or not any(char in "!@#$%^&*(),.?\":{}|<>" for char in new_password)
+                    or " " in new_password
+                ):
+                    raise HTTPException(400, detail=ERROR_MESSAGES.PASSWORD_FORMAT_INVALID)
+
+            hashed = get_password_hash(new_password)
             return Auths.update_user_password_by_id(user.id, hashed)
         else:
             raise HTTPException(400, detail=ERROR_MESSAGES.INVALID_PASSWORD)
